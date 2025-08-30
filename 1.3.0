@@ -1,0 +1,1300 @@
+{
+  "name": "BARBEARIA FRANÇA 1.3.0",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "barbearia-franca-new",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -5376,
+        -160
+      ],
+      "id": "6e6de973-d624-4c04-bc10-1111d8c72062",
+      "name": "Webhook",
+      "webhookId": "b38c5615-b816-4463-b4d2-22595d3d7619"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5d5973b8-7627-4533-bed3-1f8eb951a03e",
+              "name": "event",
+              "value": "={{ $json.body.event }}",
+              "type": "string"
+            },
+            {
+              "id": "751cf1b7-bfb2-48b4-8e35-494e46156335",
+              "name": "instance",
+              "value": "={{ $json.body.instance }}",
+              "type": "string"
+            },
+            {
+              "id": "a47f40ec-d2d5-4e85-be06-346d0cc1a261",
+              "name": "remoteJid",
+              "value": "={{ $json.body.data.key.remoteJid.split('@')[0].trim() }}\n\n\n",
+              "type": "string"
+            },
+            {
+              "id": "18ee8a35-8ea5-45dc-9f64-92d7eabbecd9",
+              "name": "fromMe",
+              "value": "={{ $json.body.data.key.fromMe }}",
+              "type": "string"
+            },
+            {
+              "id": "eeaf0983-03fa-4c3f-9960-4253af17ef75",
+              "name": "pushName",
+              "value": "={{ $json.body.data.pushName }}",
+              "type": "string"
+            },
+            {
+              "id": "646dff76-28d2-4dd2-ae84-0242f6e57e71",
+              "name": "conversation",
+              "value": "={{ $json.body.data.message.conversation }}",
+              "type": "string"
+            },
+            {
+              "id": "97ef02ac-0461-4d41-969a-0b719e863137",
+              "name": "messageType",
+              "value": "={{ $json.body.data.messageType }}",
+              "type": "string"
+            },
+            {
+              "id": "b1512842-de35-4cbe-9fd7-dc67bef788c9",
+              "name": "timestamp",
+              "value": "={{ $json.body.data.messageTimestamp }}",
+              "type": "string"
+            },
+            {
+              "id": "5b6ed7ad-8dc5-449e-b5c5-60427c66357c",
+              "name": "idMensagem",
+              "value": "={{ $json.body.data.key.id }}",
+              "type": "string"
+            },
+            {
+              "id": "76c7ff06-6821-4744-a018-7090f06d50a7",
+              "name": "id_sessao",
+              "value": "={{ $json.body.instance }}-{{ $json.body.data.key.remoteJid }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -5152,
+        -160
+      ],
+      "id": "ca24f1c0-5c8c-4ac7-9fe9-cfb364c50c35",
+      "name": "Dados"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.message }}",
+        "options": {
+          "systemMessage": "=# Papel\n<papel>\nVocê é a Camila, uma atendente virtual simpática e acolhedora da Barbearia França 💈✂️.\nVocê sempre sabe o dia e hora atuais através da variável:\n{{ $now.format('dd/MM/yyyy HH:mm') }}\nSempre se apresente como Camila, a atendente virtual da Barbearia França.\nE pergunte sempre o nome do cliente para personalizar a conversa.\nSua principal função é atendimento e agendamento de cortes de cabelo e serviços de barbearia. Especializado em interações via WhatsApp. Seu objetivo é conversar com os clientes de maneira amigável e eficiente, respondendo a perguntas, E especialmente agendando horários e fornecendo informações sobre os serviços oferecidos.\n</papel>\n# Contexto\n<contexto>\nAtendente os clientes via WhatsApp para agendar os horários de cortes de cabelo, barba, etc.\nHorários e informações sobre serviços de barbearia.\nAgendamento de horários, onde o processo de agendar é gerenciado internamente pelo fluxo do n8n, usando o Supabase como banco de dados.\nInformações sobre serviços (cortes, barba, tratamentos)\nPromoções e descontos\nLocalização e horário de funcionamento\n</contexto>\n# Tarefas\nAtender clientes via WhatsApp, respondendo perguntas frequentes, agendando horários e fornecendo informações sobre serviços de barbearia.\nAgendamento de horários\nInformações sobre serviços (cortes, barba, tratamentos)\nPromoções e descontos\nLocalização e horário de funcionamento\nDe Segunda a Sábado, das 9h às 19h.\n\n# Ferramentas\nVocê sempre sabe o dia e hora atuais através da variável:\n{{ $now.format('dd/MM/yyyy HH:mm') }}\n- Base de dados de serviços e preços\n- FAQ com perguntas frequentes\n\n# Restrições\n- Mantenha um tom amigável e profissional.\n- Responda de forma clara e concisa.\n- Evite jargões técnicos que o cliente possa não entender.\n- Sempre confirme os detalhes do agendamento com o cliente.\n- Não compartilhe informações pessoais ou sensíveis.\n\n# Exemplos\nOlá ! Como posso ajudar você hoje?\nClaro! Posso agendar um horário para você. Qual dia e horário você prefere?\nOferecemos cortes de cabelo, barba, tratamentos capilares e muito mais. Gostaria de saber sobre algum serviço específico?\nAtualmente, estamos com uma promoção de 20% de desconto em cortes de cabelo para novos clientes!\nNossa barbearia está localizada na Rua Principal, 123. Estamos abertos de segunda a sábado, das 9h às 19h.\n\n# Formato de Resposta\n**Sua resposta DEVE ser sempre um objeto JSON contendo as chaves 'intenção' e 'mensagem'. Para agendamentos, adicione também as chaves 'data_agendamento', 'hora_agendamento', 'servico_nome' e 'barbeiro'.**\n\n# Instruções Adicionais\nSua resposta JSON deve seguir esta lógica:\n\n1.  **Para sucesso no agendamento**: Retorne `{\"intenção\": \"agendamento_confirmado\", \"mensagem\": \"...\", \"data_agendamento\": \"...\", \"hora_agendamento\": \"...\", \"servico_nome\": \"...\", \"barbeiro\": \"...\"}`. Extraia os dados da mensagem do cliente e preencha as chaves. A mensagem deve ser a confirmação amigável para o cliente.\n2.  **Para falha no agendamento**: Retorne `{\"intenção\": \"agendamento_falhou\", \"mensagem\": \"...\"}`. A mensagem deve ser uma explicação amigável para o cliente.\n3.  **Para outras interações (não agendamento)**: Retorne `{\"intenção\": \"pergunta_frequente\", \"mensagem\": \"...\"}`. Use esta intenção para responder a perguntas sobre serviços, preços, localização, etc.\n\nSempre confirme os detalhes do agendamento com o cliente, incluindo data, hora e serviço solicitado. Se o cliente fizer uma pergunta que você não sabe responder, peça desculpas e informe que você verificará a informação e retornará o mais breve possível.\n\n# Objetivo\nFornecer um atendimento eficiente e amigável aos clientes da barbearia via WhatsApp, garantindo que suas necessidades sejam atendidas de maneira satisfatória.\n# Critérios de Sucesso\n- Clientes satisfeitos com o atendimento recebido.\n- Agendamentos realizados com sucesso.\n- Respostas rápidas e precisas às perguntas dos clientes.\n- Feedback positivo dos clientes sobre a interação via WhatsApp.\nFluxo de Agendamento:\n\nPergunte qual serviço o cliente deseja.\n\nPergunte o dia e o horário preferidos.\n\nPergunte com qual barbeiro o cliente deseja marcar (se houver mais de um disponível).\n\nValide as informações com base na data/hora atual e nos horários de funcionamento.\n\nRegistre o agendamento no Supabase.\n\nApós o registro ser concluído, CONFIRME SEMPRE com o cliente usando nome, serviço, barbeiro, dia e hora.\n\nExemplo de confirmação:\n→ “Perfeito, João! Seu corte + barba 💈 foi agendado com o barbeiro Carlos na quarta-feira às 15h. Está tudo certo ✅, te esperamos aqui!”\n\nSe o horário solicitado não estiver disponível, ofereça alternativa"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -3568,
+        -160
+      ],
+      "id": "fcd0c7d7-cafb-4861-b160-578aa2c3ddcf",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json[\"Mensagem de Audio\"].id_sessao }}\n",
+        "sessionTTL": 3600,
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryRedisChat",
+      "typeVersion": 1.5,
+      "position": [
+        -3504,
+        80
+      ],
+      "id": "61f31722-af8e-4d3a-9e76-05223b106238",
+      "name": "Redis Chat Memory",
+      "credentials": {
+        "redis": {
+          "id": "7vv2mdqBW1Hs6yTu",
+          "name": "Redis Nando"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c7a9f891-3441-4b61-8ae5-3450bc2cb29f",
+              "name": "message",
+              "value": "={{ $('Dados').item.json.conversation }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -4272,
+        -224
+      ],
+      "id": "6065beb2-a8dd-4b2a-8f54-2068b1600e4c",
+      "name": "Mensagem de Texto"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.messageType }}",
+                    "rightValue": "conversation",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "cdc97e07-cc8f-4501-b948-a6afc889a09a"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "0c18fa05-3022-4b6c-a848-e7e55034793f",
+                    "leftValue": "={{ $json.messageType }}",
+                    "rightValue": "audioMessage",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -4912,
+        -160
+      ],
+      "id": "0dd77472-4762-4da5-ab52-e03c860c92f0",
+      "name": "Tipo de Mensagem"
+    },
+    {
+      "parameters": {
+        "resource": "chat-api",
+        "operation": "get-media-base64",
+        "instanceName": "={{ $json.instance }}",
+        "messageId": "={{ $json.idMensagem }}"
+      },
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        -4592,
+        -48
+      ],
+      "id": "0055853c-45b1-491b-8751-be9091f69534",
+      "name": "Get Base 64",
+      "credentials": {
+        "evolutionApi": {
+          "id": "me0DAjmPwqicVrhv",
+          "name": "Evolution Secretaria"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "toBinary",
+        "sourceProperty": "data.base64",
+        "options": {
+          "fileName": "audio.mp3",
+          "mimeType": "audio/mpeg"
+        }
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        -4368,
+        -48
+      ],
+      "id": "cb37995e-5ca1-4b63-9e72-0b112c53bc80",
+      "name": "Audio"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a9b0447a-ad26-487e-b8ae-bf5b1b6d3174",
+              "name": "message",
+              "value": "={{ $json.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -3920,
+        -48
+      ],
+      "id": "5d55fb1e-8c3c-4b93-aef0-a82408e62877",
+      "name": "Mensagem de Audio"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.groq.com/openai/v1/audio/transcriptions",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "groqApi",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "model",
+              "value": "whisper-large-v3-turbo"
+            },
+            {
+              "name": "temperature",
+              "value": "0"
+            },
+            {
+              "name": "response_format",
+              "value": "verbose_json"
+            },
+            {
+              "name": "language",
+              "value": "pt"
+            },
+            {
+              "parameterType": "formBinaryData",
+              "name": "file",
+              "inputDataFieldName": "data"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -4144,
+        -48
+      ],
+      "id": "b1548b09-483c-42c3-956b-aa6321168b35",
+      "name": "Groq",
+      "credentials": {
+        "groqApi": {
+          "id": "YVBFjEdN9UWannyJ",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"messages\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\"\n      }\n    }\n  },\n  \"required\": [\"messages\"]\n}\n"
+      },
+      "id": "28164cdd-2585-439f-aaf3-5b3417e18a72",
+      "name": "Output Parser",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        176,
+        144
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Formate e separe a seguinte mensagem: {{ $json.mensagem }}\n",
+        "hasOutputParser": true,
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=Sua única saída deve ser um objeto JSON no seguinte formato:\n\n{\n  \"messages\": [\n    \"Mensagem 1\",\n    \"Mensagem 2\",\n    \"Mensagem 3\"\n  ]\n}\n\n- Nunca adicione explicações, nem texto fora desse JSON.\n- Não crie a chave \"output\".\n- Se a mensagem já for curta, devolva apenas:\n{\n  \"messages\": [\"Mensagem única aqui\"]\n}\n- Nunca devolva array vazio.\n- Nunca mais de 4 mensagens.\n"
+            }
+          ]
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.6,
+      "position": [
+        -80,
+        -144
+      ],
+      "id": "9faed542-2975-48df-b2e6-d861f5f5d69f",
+      "name": "Parser"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "output.messages",
+        "include": "allOtherFields",
+        "options": {
+          "destinationFieldName": "message"
+        }
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        480,
+        -144
+      ],
+      "id": "b7e3654a-ff0c-4ea5-a346-b994a467e768",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        704,
+        -144
+      ],
+      "id": "e8cced0c-f4bf-4cf4-a328-12506952f255",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "resource": "messages-api",
+        "instanceName": "={{ $('Dados').item.json.instance }}",
+        "remoteJid": "={{ $('Dados').item.json.remoteJid }}",
+        "messageText": "={{ $json.message }}",
+        "options_message": {
+          "delay": 2000,
+          "linkPreview": true
+        }
+      },
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        944,
+        -128
+      ],
+      "id": "73b854bc-6397-4d85-9316-d082c9ff87b2",
+      "name": "Enviar Mensagem",
+      "credentials": {
+        "evolutionApi": {
+          "id": "me0DAjmPwqicVrhv",
+          "name": "Evolution Secretaria"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -3712,
+        80
+      ],
+      "id": "03f0d0d2-215b-435e-a99a-934644ffa3a2",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "Ou7FadVrQ6qGBgBU",
+          "name": "OpenAi Geral 29/08"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "e1997f40-5143-4d4a-a34e-774dcd8aef1c",
+              "leftValue": "={{ $('Code').item.json.intenção }}",
+              "rightValue": "agendamento_confirmado",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -2768,
+        -160
+      ],
+      "id": "d898df3b-e49b-4168-8eec-d34b5ef0f9cf",
+      "name": "É Agendamento?"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Obtém o output do nó anterior e o parseia\nconst aiOutput = JSON.parse(items[0].json.output);\n\n// Define as variáveis como nulas por padrão\nlet dataFormatada = null;\nlet horaAgendamento = null;\nlet servicoNome = null;\nlet barbeiro = null;\n\n// Só tenta formatar os dados se a intenção for de agendamento\nif (aiOutput.intenção === 'agendamento_confirmado') {\n  const dataAgendamento = aiOutput.data_agendamento;\n  const partesDaData = dataAgendamento.split('/');\n  dataFormatada = partesDaData[2] + '-' + partesDaData[1] + '-' + partesDaData[0];\n\n  horaAgendamento = aiOutput.hora_agendamento + ':00';\n  servicoNome = aiOutput.servico_nome;\n  barbeiro = aiOutput.barbeiro;\n}\n\n// Retorna um novo objeto com as chaves preenchidas ou nulas\nreturn {\n  intenção: aiOutput.intenção,\n  mensagem: aiOutput.mensagem,\n  data_agendamento: dataFormatada,\n  hora_agendamento: horaAgendamento,\n  servico_nome: servicoNome,\n  barbeiro: barbeiro\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -3216,
+        -160
+      ],
+      "id": "df5f0afe-ec4e-4c2a-886b-89e55314e9e2",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "agendamentos",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "data_agendamento",
+              "condition": "eq",
+              "keyValue": "={{ $('Code').item.json.data_agendamento }}"
+            },
+            {
+              "keyName": "funcionario",
+              "condition": "eq",
+              "keyValue": "={{ $('Code').item.json.barbeiro }}"
+            },
+            {
+              "keyName": "hora_agendamento",
+              "condition": "eq",
+              "keyValue": "={{ $('Code').item.json.hora_agendamento }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -2320,
+        -240
+      ],
+      "id": "179c6976-cf2c-4753-bba8-eb47dbac0d1b",
+      "name": "Verificar Agenda",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "NYTqT5fuVmBDP7lN",
+          "name": "Supabase Barbearia"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "profiles",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "full_name",
+              "condition": "ilike",
+              "keyValue": "={{ $('Code').item.json.barbeiro }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -2544,
+        -240
+      ],
+      "id": "619740f1-b629-447a-9a16-848bd19428eb",
+      "name": "Buscar Barbeiro",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "NYTqT5fuVmBDP7lN",
+          "name": "Supabase Barbearia"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0840da47-0036-472a-a25c-b45ec39eaffe",
+              "name": "mensagem ",
+              "value": "Olá! Infelizmente, o horário que você escolheu já está ocupado. Por favor, tente outro horário ou consulte nossa disponibilidade.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -528,
+        -352
+      ],
+      "id": "84853dcb-7228-4bac-a6f8-3b3a0e4d7b86",
+      "name": "Mensagem Horário Ocupado"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "5ddb5e67-6bf9-4dd1-ab3b-ee7f10a37761",
+              "leftValue": "={{ $(\"Verificar Agenda\").length }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            },
+            {
+              "id": "9d9a5db0-4e81-480a-83ec-e88367768d4b",
+              "leftValue": "",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -2096,
+        -240
+      ],
+      "id": "d98c1fbb-fd82-431f-95ec-7e9d494c1834",
+      "name": "Verificar Disponibilidade",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "clientes",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "telefone",
+              "condition": "eq",
+              "keyValue": "={{ $(\"Dados\").item.json.remoteJid }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -1872,
+        -144
+      ],
+      "id": "f7e6e838-a4f6-4117-9d17-bb006829aa34",
+      "name": "Verificar Cliente",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "NYTqT5fuVmBDP7lN",
+          "name": "Supabase Barbearia"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "719a7c4e-907a-4e6c-9fe7-ba7a882ce983",
+              "leftValue": "={{ $(\"Verificar Cliente\").length }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -1648,
+        -144
+      ],
+      "id": "86c62c91-4aa7-4e7d-94ab-0acc24c6bf8d",
+      "name": "Cliente Existe?"
+    },
+    {
+      "parameters": {
+        "tableId": "clientes",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "nome",
+              "fieldValue": "={{ $(\"Dados\").item.json.pushName }}"
+            },
+            {
+              "fieldId": "telefone",
+              "fieldValue": "={{ $(\"Dados\").item.json.remoteJid }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -1424,
+        -64
+      ],
+      "id": "12dc74da-3603-4f54-8449-8b259af88ae1",
+      "name": "Criar Cliente",
+      "credentials": {
+        "supabaseApi": {
+          "id": "NYTqT5fuVmBDP7lN",
+          "name": "Supabase Barbearia"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -1200,
+        -144
+      ],
+      "id": "8ced8a9e-7ba9-4634-9d36-1bdfdbf79eb2",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "servicos",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "nome",
+              "condition": "ilike",
+              "keyValue": "={{ $('Code').item.json.servico_nome }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -976,
+        -144
+      ],
+      "id": "f0a4044e-b362-471c-be7c-4f5fca8bd96d",
+      "name": "Buscar Serviço",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "NYTqT5fuVmBDP7lN",
+          "name": "Supabase Barbearia"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "agendamentos",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "cliente_id",
+              "fieldValue": "={{ $('Merge').item.json.id }}"
+            },
+            {
+              "fieldId": "funcionario",
+              "fieldValue": "={{ $('Buscar Barbeiro').item.json.id }}"
+            },
+            {
+              "fieldId": "servico_id",
+              "fieldValue": "={{ $('Buscar Serviço').item.json.id }}"
+            },
+            {
+              "fieldId": "hora_agendamento",
+              "fieldValue": "={{ $('Code').item.json.hora_agendamento }}"
+            },
+            {
+              "fieldId": "data_agendamento",
+              "fieldValue": "={{ $('Code').item.json.data_agendamento }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -752,
+        -144
+      ],
+      "id": "07823f22-f9b7-45a9-b392-51a45a4257d2",
+      "name": "Agendar Horário",
+      "credentials": {
+        "supabaseApi": {
+          "id": "NYTqT5fuVmBDP7lN",
+          "name": "Supabase Barbearia"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "numberInputs": 3
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -304,
+        -160
+      ],
+      "id": "d61dd0f6-e59d-4836-a02f-88ddf94397ca",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d46f5dc6-f221-4db8-baea-10d0d13b0513",
+              "name": "mensagem",
+              "value": "={{ $('Code').item.json.mensagem }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -2992,
+        -160
+      ],
+      "id": "bc7f2429-dabd-4d11-ad7c-601c0a9f33a7",
+      "name": "Mensagem Final1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6f2420c6-290c-4c04-a4c9-58ac14c20a77",
+              "name": "mensagem",
+              "value": "=Perfeito, {{ $json.nome_cliente }}! Seu corte foi agendado com o barbeiro {{ $json.barbeiro }} na data {{ $json.data_agendamento }} às {{ $json.hora_agendamento }}. Está tudo certo ✅, te esperamos aqui!",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -528,
+        -144
+      ],
+      "id": "0e466c3c-e500-4af1-8294-ae51463a6588",
+      "name": "Mensagem Final2"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -96,
+        160
+      ],
+      "id": "58d0586d-3c4d-4e61-99c4-d13149565436",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "Ou7FadVrQ6qGBgBU",
+          "name": "OpenAi Geral 29/08"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Dados",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dados": {
+      "main": [
+        [
+          {
+            "node": "Tipo de Mensagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Redis Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mensagem de Texto": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tipo de Mensagem": {
+      "main": [
+        [
+          {
+            "node": "Mensagem de Texto",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get Base 64",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Base 64": {
+      "main": [
+        [
+          {
+            "node": "Audio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Audio": {
+      "main": [
+        [
+          {
+            "node": "Groq",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mensagem de Audio": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq": {
+      "main": [
+        [
+          {
+            "node": "Mensagem de Audio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Parser",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parser": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Enviar Mensagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar Mensagem": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "É Agendamento?": {
+      "main": [
+        [
+          {
+            "node": "Buscar Barbeiro",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Mensagem Final1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar Barbeiro": {
+      "main": [
+        [
+          {
+            "node": "Verificar Agenda",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verificar Agenda": {
+      "main": [
+        [
+          {
+            "node": "Verificar Disponibilidade",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mensagem Horário Ocupado": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verificar Disponibilidade": {
+      "main": [
+        [
+          {
+            "node": "Mensagem Horário Ocupado",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Verificar Cliente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verificar Cliente": {
+      "main": [
+        [
+          {
+            "node": "Cliente Existe?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cliente Existe?": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Criar Cliente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Criar Cliente": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Buscar Serviço",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar Serviço": {
+      "main": [
+        [
+          {
+            "node": "Agendar Horário",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agendar Horário": {
+      "main": [
+        [
+          {
+            "node": "Mensagem Final2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Parser",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mensagem Final1": {
+      "main": [
+        [
+          {
+            "node": "É Agendamento?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mensagem Final2": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Parser",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "7a512c82-7903-47d9-b493-baddd2b91e1c",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "51ec8b13dcbf144ca4f84c354a83778b0deb1106e3615dc3e4f21105dfa59e92"
+  },
+  "id": "KqH31tKjuTTwNRQf",
+  "tags": [
+    {
+      "createdAt": "2025-08-30T04:32:43.739Z",
+      "updatedAt": "2025-08-30T04:32:43.739Z",
+      "id": "hUsisiHKUZabB6o4",
+      "name": "PatoDonald"
+    }
+  ]
+}
